@@ -1,0 +1,29 @@
+{
+  "name": "dayjs-ts-reimplementation",
+  "version": "1.0.0",
+  "description": "TypeScript reimplementation of Day.js with built-in plugins",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "npx tsx test.ts",
+    "build": "tsc",
+    "dev": "npx tsx --watch test.ts"
+  },
+  "keywords": [
+    "date",
+    "time",
+    "dayjs",
+    "typescript",
+    "immutable"
+  ],
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {
+    "prettier": "^3.6.2"
+  }
+}
