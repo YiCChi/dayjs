@@ -29,20 +29,6 @@ export class DayJS {
   private _offset?: number
   private _localOffset?: number
   private _date: Date
-  private _year: number
-  private _month: number
-  /**
-   * 1-31
-   */
-  private _day: number
-  /**
-   * 0-6, 0 is Sunday
-   */
-  private _weekday: number
-  private _hour: number
-  private _minute: number
-  private _second: number
-  private _ms: number
 
   // utc in
   constructor(config: Config = {}) {
@@ -50,26 +36,6 @@ export class DayJS {
     this._utc = config.utc ?? false
     this._offset = config.offset
     this._date = DayJS.parseDateInput(config)
-
-    if (this._utc) {
-      this._year = this._date.getUTCFullYear()
-      this._month = this._date.getUTCMonth()
-      this._day = this._date.getUTCDate()
-      this._weekday = this._date.getUTCDay()
-      this._hour = this._date.getUTCHours()
-      this._minute = this._date.getUTCMinutes()
-      this._second = this._date.getUTCSeconds()
-      this._ms = this._date.getUTCMilliseconds()
-    } else {
-      this._year = this._date.getFullYear()
-      this._month = this._date.getMonth()
-      this._day = this._date.getDate()
-      this._weekday = this._date.getDay()
-      this._hour = this._date.getHours()
-      this._minute = this._date.getMinutes()
-      this._second = this._date.getSeconds()
-      this._ms = this._date.getMilliseconds()
-    }
   }
 
   // ! helper
@@ -124,7 +90,6 @@ export class DayJS {
     })
   }
 
-  // Public API methods
   isValid(): boolean {
     return !(this._date.toString() === C.INVALID_DATE_STRING)
   }
@@ -158,30 +123,27 @@ export class DayJS {
   }
 
   startOf(units?: UnitTypeShort | UnitType): DayJS {
-    // const utcPad = `set${this._utc ? 'UTC' : ''}` as const
     const unit = units === undefined ? undefined : Utils.prettyUnit(units)
-    // const unit = Utils.prettyUnit(units ?? 'day')
 
     switch (unit) {
       case 'year':
         return this.wrapper(
-          this._utc ? Date.UTC(this._year, 0, 1) : new Date(this._year, 0, 1)
+          this._utc ? Date.UTC(this.year(), 0, 1) : new Date(this.year(), 0, 1)
         )
       case 'month':
         return this.wrapper(
           this._utc
-            ? Date.UTC(this._year, this._month, 1)
-            : new Date(this._year, this._month, 1)
+            ? Date.UTC(this.year(), this.month(), 1)
+            : new Date(this.year(), this.month(), 1)
         )
       case 'week': {
         const weekStart = this._locale.weekStart ?? 0
         const gap =
-          (this._weekday < weekStart ? this._weekday + 7 : this._weekday) -
-          weekStart
+          (this.day() < weekStart ? this.day() + 7 : this.day()) - weekStart
         return this.wrapper(
           this._utc
-            ? Date.UTC(this._year, this._month, this._day - gap)
-            : new Date(this._year, this._month, this._day - gap)
+            ? Date.UTC(this.year(), this.month(), this.date() - gap)
+            : new Date(this.year(), this.month(), this.date() - gap)
         )
       }
       case 'day':
@@ -225,35 +187,34 @@ export class DayJS {
       case 'year':
         return this.wrapper(
           this._utc
-            ? Date.UTC(this._year, 11, 31, 23, 59, 59, 999)
-            : new Date(this._year, 11, 31, 23, 59, 59, 999)
+            ? Date.UTC(this.year(), 11, 31, 23, 59, 59, 999)
+            : new Date(this.year(), 11, 31, 23, 59, 59, 999)
         )
       case 'month':
         return this.wrapper(
           this._utc
-            ? Date.UTC(this._year, this._month + 1, 0, 23, 59, 59, 999)
-            : new Date(this._year, this._month + 1, 0, 23, 59, 59, 999)
+            ? Date.UTC(this.year(), this.month() + 1, 0, 23, 59, 59, 999)
+            : new Date(this.year(), this.month() + 1, 0, 23, 59, 59, 999)
         )
       case 'week': {
         const weekStart = this._locale.weekStart ?? 0
         const gap =
-          (this._weekday < weekStart ? this._weekday + 7 : this._weekday) -
-          weekStart
+          (this.day() < weekStart ? this.day() + 7 : this.day()) - weekStart
         return this.wrapper(
           this._utc
             ? Date.UTC(
-                this._year,
-                this._month,
-                this._day + (6 - gap),
+                this.year(),
+                this.month(),
+                this.date() + (6 - gap),
                 23,
                 59,
                 59,
                 999
               )
             : new Date(
-                this._year,
-                this._month,
-                this._day + (6 - gap),
+                this.year(),
+                this.month(),
+                this.date() + (6 - gap),
                 23,
                 59,
                 59,
@@ -310,10 +271,10 @@ export class DayJS {
       newInstance._date[Utils.reflectDateSetMethodName('date', this._utc)](1)
       newInstance._date[setMethod](value)
       newInstance._date[Utils.reflectDateSetMethodName('date', this._utc)](
-        Math.min(this._day, newInstance.daysInMonth())
+        Math.min(this.date(), newInstance.daysInMonth())
       )
     } else {
-      const arg = u === 'day' ? this._day + (value - this._weekday) : value
+      const arg = u === 'day' ? this.date() + (value - this.day()) : value
       newInstance._date[setMethod](arg)
     }
     return this.wrapper(newInstance._date)
@@ -328,21 +289,21 @@ export class DayJS {
 
     switch (key) {
       case 'year':
-        return this._year
+        return this.year()
       case 'month':
-        return this._month
+        return this.month()
       case 'day':
-        return this._weekday
+        return this.day()
       case 'date':
-        return this._day
+        return this.date()
       case 'hour':
-        return this._hour
+        return this.hour()
       case 'minute':
-        return this._minute
+        return this.minute()
       case 'second':
-        return this._second
+        return this.second()
       case 'millisecond':
-        return this._ms
+        return this.millisecond()
     }
   }
 
@@ -351,16 +312,16 @@ export class DayJS {
     unit: Exclude<UnitType, 'quarter' | 'date'> = 'millisecond'
   ): DayJS {
     if (unit === 'month') {
-      return this.set('month', this._month + value)
+      return this.set('month', this.month() + value)
     }
     if (unit === 'year') {
-      return this.set('year', this._year + value)
+      return this.set('year', this.year() + value)
     }
     if (unit === 'day') {
-      return this.set('date', this._day + Math.round(value))
+      return this.set('date', this.date() + Math.round(value))
     }
     if (unit === 'week') {
-      return this.set('date', this._day + Math.round(value * 7))
+      return this.set('date', this.date() + Math.round(value * 7))
     }
 
     const step = {
@@ -389,63 +350,62 @@ export class DayJS {
     const matches = (match: string) => {
       switch (match) {
         case 'YY':
-          return String(this._year).slice(-2)
+          return String(this.year()).slice(-2)
         case 'YYYY':
-          return String(this._year).padStart(4, '0')
+          return String(this.year()).padStart(4, '0')
         case 'M':
-          return String(this._month + 1)
+          return String(this.month() + 1)
         case 'MM':
-          return String(this._month + 1).padStart(2, '0')
+          return String(this.month() + 1).padStart(2, '0')
         case 'MMM':
           return (
-            this._locale.monthsShort?.[this._month] ??
-            this._locale.months[this._month].slice(0, 3)
+            this._locale.monthsShort?.[this.month()] ??
+            this._locale.months[this.month()].slice(0, 3)
           )
         case 'MMMM':
-          return this._locale.months[this._month]
+          return this._locale.months[this.month()]
         case 'D':
-          return String(this._day)
+          return String(this.date())
         case 'DD':
-          return String(this._day).padStart(2, '0')
+          return String(this.date()).padStart(2, '0')
         case 'd':
-          return String(this._weekday)
+          return String(this.day())
         case 'dd':
           return (
-            this._locale.weekdaysMin?.[this._weekday] ??
-            this._locale.weekdays[this._weekday].slice(0, 2)
+            this._locale.weekdaysMin?.[this.day()] ??
+            this._locale.weekdays[this.day()].slice(0, 2)
           )
         case 'ddd':
           return (
-            this._locale.weekdaysShort?.[this._weekday] ??
-            this._locale.weekdays[this._weekday].slice(0, 3)
+            this._locale.weekdaysShort?.[this.day()] ??
+            this._locale.weekdays[this.day()].slice(0, 3)
           )
         case 'dddd':
-          return this._locale.weekdays[this._weekday]
+          return this._locale.weekdays[this.day()]
         case 'H':
-          return String(this._hour)
+          return String(this.hour())
         case 'HH':
-          return String(this._hour).padStart(2, '0')
+          return String(this.hour()).padStart(2, '0')
         case 'h':
-          return String(this._hour % 12 === 0 ? 12 : this._hour % 12)
+          return String(this.hour() % 12 === 0 ? 12 : this.hour() % 12)
         case 'hh':
-          return String(this._hour % 12 === 0 ? 12 : this._hour % 12).padStart(
-            2,
-            '0'
-          )
+          return String(
+            this.hour() % 12 === 0 ? 12 : this.hour() % 12
+          ).padStart(2, '0')
         case 'a':
-          return this._locale.meridiem(this._hour, this._minute, true)
+          return this._locale.meridiem(this.hour(), this.minute(), true)
         case 'A':
-          return this._locale.meridiem(this._hour, this._minute, false)
+          return this._locale.meridiem(this.hour(), this.minute(), false)
         case 'm':
-          return String(this._minute)
+          return String(this.minute())
         case 'mm':
-          return String(this._minute).padStart(2, '0')
+          return String(this.minute()).padStart(2, '0')
         case 's':
-          return String(this._second)
+          return String(this.second())
         case 'ss':
-          return String(this._second).padStart(2, '0')
+          return String(this.second()).padStart(2, '0')
         case 'SSS':
-          return String(this._ms).padStart(3, '0')
+          return String(this.millisecond()).padStart(3, '0')
         case 'Z':
           return zoneStr
         default:
@@ -549,9 +509,9 @@ export class DayJS {
   }
 
   daysInMonth(): number {
-    if (this._month === 1) {
-      return (this._year % 4 === 0 && this._year % 100 !== 0) ||
-        this._year % 400 === 0
+    if (this.month() === 1) {
+      return (this.year() % 4 === 0 && this.year() % 100 !== 0) ||
+        this.year() % 400 === 0
         ? 29
         : 28
     }
@@ -569,7 +529,7 @@ export class DayJS {
       '12': 31
     }
 
-    return map[String(this._month + 1) as keyof typeof map]
+    return map[String(this.month() + 1) as keyof typeof map]
   }
 
   locale(preset?: Locales | ILocale): DayJS {
@@ -610,49 +570,87 @@ export class DayJS {
   millisecond(): number
   millisecond(value: number): DayJS
   millisecond(value?: number) {
-    return value === undefined ? this._ms : this.set('millisecond', value)
+    return value === undefined
+      ? this._utc
+        ? this._date.getUTCMilliseconds()
+        : this._date.getMilliseconds()
+      : this.set('millisecond', value)
   }
 
   second(): number
   second(value: number): DayJS
   second(value?: number) {
-    return value === undefined ? this._second : this.set('second', value)
+    return value === undefined
+      ? this._utc
+        ? this._date.getUTCSeconds()
+        : this._date.getSeconds()
+      : this.set('second', value)
   }
 
   minute(): number
   minute(value: number): DayJS
   minute(value?: number) {
-    return value === undefined ? this._minute : this.set('minute', value)
+    return value === undefined
+      ? this._utc
+        ? this._date.getUTCMinutes()
+        : this._date.getMinutes()
+      : this.set('minute', value)
   }
 
   hour(): number
   hour(value: number): DayJS
   hour(value?: number) {
-    return value === undefined ? this._hour : this.set('hour', value)
+    return value === undefined
+      ? this._utc
+        ? this._date.getUTCHours()
+        : this._date.getHours()
+      : this.set('hour', value)
   }
 
+  /**
+   * Get the day of the week (0-6, where 0 is Sunday).
+   */
   day(): number
   day(value: number): DayJS
   day(value?: number) {
-    return value === undefined ? this._weekday : this.set('day', value)
+    return value === undefined
+      ? this._utc
+        ? this._date.getUTCDay()
+        : this._date.getDay()
+      : this.set('day', value)
   }
 
+  /**
+   * Get the day of the month (1-31).
+   */
   date(): number
   date(value: number): DayJS
   date(value?: number) {
-    return value === undefined ? this._day : this.set('date', value)
+    return value === undefined
+      ? this._utc
+        ? this._date.getUTCDate()
+        : this._date.getDate()
+      : this.set('date', value)
   }
 
   month(): number
   month(value: number): DayJS
   month(value?: number) {
-    return value === undefined ? this._month : this.set('month', value)
+    return value === undefined
+      ? this._utc
+        ? this._date.getUTCMonth()
+        : this._date.getMonth()
+      : this.set('month', value)
   }
 
   year(): number
   year(value: number): DayJS
   year(value?: number) {
-    return value === undefined ? this._year : this.set('year', value)
+    return value === undefined
+      ? this._utc
+        ? this._date.getUTCFullYear()
+        : this._date.getFullYear()
+      : this.set('year', value)
   }
 
   // ----------------------------------------------------
