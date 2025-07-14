@@ -20,4 +20,3 @@ export type UnitType =
   | 'year'
   | 'quarter'
   | 'date'
-

@@ -2,7 +2,18 @@ import type { DayJS } from './index'
 import * as C from './constants'
 import type { UnitType, UnitTypeShort } from './types'
 
-const VALID_SHORT_UNITS: UnitTypeShort[] = ['ms', 's', 'm', 'h', 'd', 'w', 'M', 'Q', 'y', 'D']
+const VALID_SHORT_UNITS: UnitTypeShort[] = [
+  'ms',
+  's',
+  'm',
+  'h',
+  'd',
+  'w',
+  'M',
+  'Q',
+  'y',
+  'D'
+]
 
 const SHORT_UNIT_MAP: Record<UnitTypeShort, UnitType> = {
   ms: 'millisecond',
@@ -32,7 +43,10 @@ export class Utils {
     const wholeMonthDiff = (b.year() - a.year()) * 12 + (b.month() - a.month())
     const anchor = a.clone().add(wholeMonthDiff, C.M).valueOf()
     const c = b.valueOf() - anchor.valueOf() < 0
-    const anchor2 = a.clone().add(wholeMonthDiff + (c ? -1 : 1), C.M).valueOf()
+    const anchor2 = a
+      .clone()
+      .add(wholeMonthDiff + (c ? -1 : 1), C.M)
+      .valueOf()
     return +(
       -(
         wholeMonthDiff +
@@ -46,7 +60,10 @@ export class Utils {
   }
 
   static isUnitTypeShort(u: unknown): u is UnitTypeShort {
-    if (typeof u !== 'string' || !VALID_SHORT_UNITS.includes(u as UnitTypeShort))
+    if (
+      typeof u !== 'string' ||
+      !VALID_SHORT_UNITS.includes(u as UnitTypeShort)
+    )
       return false
 
     return true
@@ -61,7 +78,9 @@ export class Utils {
     const offset = value.match(C.REGEX_VALID_OFFSET_FORMAT)
     if (!offset) return null
 
-    const [indicator, hoursOffset, minutesOffset] = `${offset[0]}`.match(C.REGEX_OFFSET_HOURS_MINUTES_FORMAT) ?? ['-', 0, 0]
+    const [indicator, hoursOffset, minutesOffset] = `${offset[0]}`.match(
+      C.REGEX_OFFSET_HOURS_MINUTES_FORMAT
+    ) ?? ['-', 0, 0]
     const totalOffsetInMinutes = +hoursOffset * 60 + +minutesOffset
 
     if (totalOffsetInMinutes === 0) return 0
@@ -75,10 +94,7 @@ export class Utils {
    * @param utc - Whether to use UTC methods. @default false.
    * @returns The corresponding Date method name.
    */
-  static reflectDateSetMethodName(
-    unit: UnitTypeShort | UnitType,
-    utc = false
-  ) {
+  static reflectDateSetMethodName(unit: UnitTypeShort | UnitType, utc = false) {
     const utcPad = utc ? 'UTC' : ''
     const map = {
       millisecond: `set${utcPad}Milliseconds`,
@@ -90,7 +106,7 @@ export class Utils {
       month: `set${utcPad}Month`,
       quarter: `set${utcPad}Month`,
       year: `set${utcPad}FullYear`,
-      date: `set${utcPad}Date`,
+      date: `set${utcPad}Date`
     } as const
 
     return map[Utils.prettyUnit(unit)]
