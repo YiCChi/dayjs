@@ -6,7 +6,7 @@ import { it, expect, vi, describe } from 'vitest'
 moment.locale('ja')
 
 it('Format no formatStr', () => {
-  vi.useFakeTimers();
+  vi.useFakeTimers()
   expect(dayjs().format()).toBe(moment().format())
   vi.useRealTimers()
 })
@@ -17,14 +17,14 @@ it('Format invalid date', () => {
 })
 
 it('Format Year YY YYYY', () => {
-  vi.useFakeTimers();
+  vi.useFakeTimers()
   expect(dayjs().format('YY')).toBe(moment().format('YY'))
   expect(dayjs().format('YYYY')).toBe(moment().format('YYYY'))
   vi.useRealTimers()
 })
 
 it('Format Month M MM MMM MMMM', () => {
-  vi.useFakeTimers();
+  vi.useFakeTimers()
   expect(dayjs().format('M')).toBe(moment().format('M'))
   expect(dayjs().format('MM')).toBe(moment().format('MM'))
   expect(dayjs().format('MMM')).toBe(moment().format('MMM'))
@@ -33,7 +33,7 @@ it('Format Month M MM MMM MMMM', () => {
 })
 
 it('Format Day of Month D DD 1 - 31', () => {
-  vi.useFakeTimers();
+  vi.useFakeTimers()
   expect(dayjs().format('D')).toBe(moment().format('D'))
   expect(dayjs().format('DD')).toBe(moment().format('DD'))
   vi.useRealTimers()
@@ -81,7 +81,9 @@ it('Format meridiens a A am / pm', () => {
   expect(dayjs(time).format('A')).toBe('午前')
   expect(dayjs(time).format('A')).toBe(moment(time).format('A'))
   expect(dayjs(time).locale('en').format('a')).toBe('am')
-  expect(dayjs(time).locale('en').format('a')).toBe(moment(time).locale('en').format('a'))
+  expect(dayjs(time).locale('en').format('a')).toBe(
+    moment(time).locale('en').format('a')
+  )
 
   const time2 = '2018-05-02T23:00:00.000'
   expect(dayjs(time2).format('a')).toBe('午後')
@@ -89,7 +91,9 @@ it('Format meridiens a A am / pm', () => {
   expect(dayjs(time2).format('A')).toBe('午後')
   expect(dayjs(time2).format('A')).toBe(moment(time2).format('A'))
   expect(dayjs(time2).locale('en').format('a')).toBe('pm')
-  expect(dayjs(time2).locale('en').format('a')).toBe(moment(time2).locale('en').format('a'))
+  expect(dayjs(time2).locale('en').format('a')).toBe(
+    moment(time2).locale('en').format('a')
+  )
 })
 
 it('Format Minute m mm', () => {
@@ -115,28 +119,23 @@ it('Format Time Zone ZZ', () => {
 })
 
 it('Format ddd dd MMM with short locale', () => {
-  expect(dayjs()
-    .locale(zhCn)
-    .format('dd')).toBe(moment()
-      .locale('zh-cn')
-      .format('dd'))
-  expect(dayjs()
-    .locale('zh-cn')
-    .format('ddd')).toBe(moment()
-      .locale('zh-cn')
-      .format('ddd'))
-  expect(dayjs()
-    .locale(zhCn)
-    .format('MMM')).toBe(moment()
-      .locale('zh-cn')
-      .format('MMM'))
+  expect(dayjs().locale(zhCn).format('dd')).toBe(
+    moment().locale('zh-cn').format('dd')
+  )
+  expect(dayjs().locale('zh-cn').format('ddd')).toBe(
+    moment().locale('zh-cn').format('ddd')
+  )
+  expect(dayjs().locale(zhCn).format('MMM')).toBe(
+    moment().locale('zh-cn').format('MMM')
+  )
 })
 
 it('Format token value is 0', () => {
   const sundayDate = '2000-01-02'
   const sundayStr = 'd H m s'
-  expect(dayjs(sundayDate).format(sundayStr))
-    .toBe(moment(sundayDate).format(sundayStr))
+  expect(dayjs(sundayDate).format(sundayStr)).toBe(
+    moment(sundayDate).format(sundayStr)
+  )
 })
 
 it('Format Complex with other string - : / ', () => {
@@ -177,12 +176,25 @@ describe('Difference', () => {
     const momentA = moment()
     const momentB = moment().add(1000, 'day')
     const momentC = moment().subtract(1000, 'day')
-    const units = ['second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'] as const
+    const units = [
+      'second',
+      'minute',
+      'hour',
+      'day',
+      'week',
+      'month',
+      'quarter',
+      'year'
+    ] as const
     units.forEach((unit) => {
       expect(dayjsA.diff(dayjsB, unit)).toBe(momentA.diff(momentB, unit))
-      expect(dayjsA.diff(dayjsB, unit, true)).toBe(momentA.diff(momentB, unit, true))
+      expect(dayjsA.diff(dayjsB, unit, true)).toBe(
+        momentA.diff(momentB, unit, true)
+      )
       expect(dayjsA.diff(dayjsC, unit)).toBe(momentA.diff(momentC, unit))
-      expect(dayjsA.diff(dayjsC, unit, true)).toBe(momentA.diff(momentC, unit, true))
+      expect(dayjsA.diff(dayjsC, unit, true)).toBe(
+        momentA.diff(momentC, unit, true)
+      )
     })
   })
 
@@ -196,9 +208,13 @@ describe('Difference', () => {
     const units = ['month', 'quarter', 'year'] as const
     units.forEach((unit) => {
       expect(dayjsA.diff(dayjsB, unit)).toBe(momentA.diff(momentB, unit))
-      expect(dayjsA.diff(dayjsB, unit, true)).toBe(momentA.diff(momentB, unit, true))
+      expect(dayjsA.diff(dayjsB, unit, true)).toBe(
+        momentA.diff(momentB, unit, true)
+      )
       expect(dayjsA.diff(dayjsC, unit)).toBe(momentA.diff(momentC, unit))
-      expect(dayjsA.diff(dayjsC, unit, true)).toBe(momentA.diff(momentC, unit, true))
+      expect(dayjsA.diff(dayjsC, unit, true)).toBe(
+        momentA.diff(momentC, unit, true)
+      )
     })
   })
 
@@ -228,8 +244,12 @@ it('Days in Month', () => {
 })
 
 it('Utc Offset', () => {
-  expect(dayjs('2013-01-01T00:00:00.000').utcOffset()).toBe(moment('2013-01-01T00:00:00.000').utcOffset())
-  expect(dayjs('2013-01-01T05:00:00.000').utcOffset()).toBe(moment('2013-01-01T05:00:00.000').utcOffset())
+  expect(dayjs('2013-01-01T00:00:00.000').utcOffset()).toBe(
+    moment('2013-01-01T00:00:00.000').utcOffset()
+  )
+  expect(dayjs('2013-01-01T05:00:00.000').utcOffset()).toBe(
+    moment('2013-01-01T05:00:00.000').utcOffset()
+  )
 })
 
 it('As Javascript Date -> toDate', () => {

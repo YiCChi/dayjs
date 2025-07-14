@@ -1,5 +1,5 @@
 import dayjs from '../index'
-import { describe, test, expect, } from 'vitest';
+import { describe, test, expect } from 'vitest'
 
 describe('isSame without units', () => {
   const m = dayjs(new Date(2011, 3, 2, 3, 4, 5, 10))
@@ -96,29 +96,41 @@ describe('isSame with year unit', () => {
 
   describe('year matching', () => {
     test('should return true when year matches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 5, 6, 7, 8, 9, 10)), 'year')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 5, 6, 7, 8, 9, 10)), 'year')).toBe(
+        true
+      )
     })
 
     test('should return false when year mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2012, 5, 6, 7, 8, 9, 10)), 'year')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2012, 5, 6, 7, 8, 9, 10)), 'year')).toBe(
+        false
+      )
     })
   })
 
   describe('year boundaries', () => {
     test('should return true at exact start of year', () => {
-      expect(m.isSame(dayjs(new Date(2011, 0, 1, 0, 0, 0, 0)), 'year')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 0, 1, 0, 0, 0, 0)), 'year')).toBe(
+        true
+      )
     })
 
     test('should return true at exact end of year', () => {
-      expect(m.isSame(dayjs(new Date(2011, 11, 31, 23, 59, 59, 999)), 'year')).toBe(true)
+      expect(
+        m.isSame(dayjs(new Date(2011, 11, 31, 23, 59, 59, 999)), 'year')
+      ).toBe(true)
     })
 
     test('should return false at start of next year', () => {
-      expect(m.isSame(dayjs(new Date(2012, 0, 1, 0, 0, 0, 0)), 'year')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2012, 0, 1, 0, 0, 0, 0)), 'year')).toBe(
+        false
+      )
     })
 
     test('should return false at end of previous year', () => {
-      expect(m.isSame(dayjs(new Date(2010, 11, 31, 23, 59, 59, 999)), 'year')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2010, 11, 31, 23, 59, 59, 999)), 'year')
+      ).toBe(false)
     })
   })
 
@@ -139,33 +151,47 @@ describe('isSame with month unit', () => {
 
   describe('month matching', () => {
     test('should return true when month matches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 2, 6, 7, 8, 9, 10)), 'month')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 2, 6, 7, 8, 9, 10)), 'month')).toBe(
+        true
+      )
     })
 
     test('should return false when year mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2012, 2, 6, 7, 8, 9, 10)), 'month')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2012, 2, 6, 7, 8, 9, 10)), 'month')).toBe(
+        false
+      )
     })
 
     test('should return false when month mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 5, 6, 7, 8, 9, 10)), 'month')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 5, 6, 7, 8, 9, 10)), 'month')).toBe(
+        false
+      )
     })
   })
 
   describe('month boundaries', () => {
     test('should return true at exact start of month', () => {
-      expect(m.isSame(dayjs(new Date(2011, 2, 1, 0, 0, 0, 0)), 'month')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 2, 1, 0, 0, 0, 0)), 'month')).toBe(
+        true
+      )
     })
 
     test('should return true at exact end of month', () => {
-      expect(m.isSame(dayjs(new Date(2011, 2, 31, 23, 59, 59, 999)), 'month')).toBe(true)
+      expect(
+        m.isSame(dayjs(new Date(2011, 2, 31, 23, 59, 59, 999)), 'month')
+      ).toBe(true)
     })
 
     test('should return false at start of next month', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 1, 0, 0, 0, 0)), 'month')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 3, 1, 0, 0, 0, 0)), 'month')).toBe(
+        false
+      )
     })
 
     test('should return false at end of previous month', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 27, 23, 59, 59, 999)), 'month')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 1, 27, 23, 59, 59, 999)), 'month')
+      ).toBe(false)
     })
   })
 
@@ -186,37 +212,53 @@ describe('isSame with day unit', () => {
 
   describe('day matching', () => {
     test('should return true when day matches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 7, 8, 9, 10)), 'day')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 7, 8, 9, 10)), 'day')).toBe(
+        true
+      )
     })
 
     test('should return false when year mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2012, 1, 2, 7, 8, 9, 10)), 'day')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2012, 1, 2, 7, 8, 9, 10)), 'day')).toBe(
+        false
+      )
     })
 
     test('should return false when month mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 2, 2, 7, 8, 9, 10)), 'day')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 2, 2, 7, 8, 9, 10)), 'day')).toBe(
+        false
+      )
     })
 
     test('should return false when day mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 3, 7, 8, 9, 10)), 'day')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 3, 7, 8, 9, 10)), 'day')).toBe(
+        false
+      )
     })
   })
 
   describe('day boundaries', () => {
     test('should return true at exact start of day', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 0, 0, 0, 0)), 'day')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 0, 0, 0, 0)), 'day')).toBe(
+        true
+      )
     })
 
     test('should return true at exact end of day', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 23, 59, 59, 999)), 'day')).toBe(true)
+      expect(
+        m.isSame(dayjs(new Date(2011, 1, 2, 23, 59, 59, 999)), 'day')
+      ).toBe(true)
     })
 
     test('should return false at start of next day', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 3, 0, 0, 0, 0)), 'day')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 3, 0, 0, 0, 0)), 'day')).toBe(
+        false
+      )
     })
 
     test('should return false at end of previous day', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 1, 23, 59, 59, 999)), 'day')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 1, 1, 23, 59, 59, 999)), 'day')
+      ).toBe(false)
     })
   })
 
@@ -237,41 +279,59 @@ describe('isSame with hour unit', () => {
 
   describe('hour matching', () => {
     test('should return true when hour matches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 8, 9, 10)), 'hour')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 8, 9, 10)), 'hour')).toBe(
+        true
+      )
     })
 
     test('should return false when year mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2012, 1, 2, 3, 8, 9, 10)), 'hour')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2012, 1, 2, 3, 8, 9, 10)), 'hour')).toBe(
+        false
+      )
     })
 
     test('should return false when month mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 2, 2, 3, 8, 9, 10)), 'hour')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 2, 2, 3, 8, 9, 10)), 'hour')).toBe(
+        false
+      )
     })
 
     test('should return false when day mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 3, 3, 8, 9, 10)), 'hour')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 3, 3, 8, 9, 10)), 'hour')).toBe(
+        false
+      )
     })
 
     test('should return false when hour mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 4, 8, 9, 10)), 'hour')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 4, 8, 9, 10)), 'hour')).toBe(
+        false
+      )
     })
   })
 
   describe('hour boundaries', () => {
     test('should return true at exact start of hour', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 0, 0, 0)), 'hour')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 0, 0, 0)), 'hour')).toBe(
+        true
+      )
     })
 
     test('should return true at exact end of hour', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 59, 59, 999)), 'hour')).toBe(true)
+      expect(
+        m.isSame(dayjs(new Date(2011, 1, 2, 3, 59, 59, 999)), 'hour')
+      ).toBe(true)
     })
 
     test('should return false at start of next hour', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 4, 0, 0, 0)), 'hour')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 4, 0, 0, 0)), 'hour')).toBe(
+        false
+      )
     })
 
     test('should return false at end of previous hour', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 2, 59, 59, 999)), 'hour')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 1, 2, 2, 59, 59, 999)), 'hour')
+      ).toBe(false)
     })
   })
 
@@ -292,45 +352,65 @@ describe('isSame with minute unit', () => {
 
   describe('minute matching', () => {
     test('should return true when minute matches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 9, 10)), 'minute')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 9, 10)), 'minute')).toBe(
+        true
+      )
     })
 
     test('should return false when year mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2012, 1, 2, 3, 4, 9, 10)), 'minute')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2012, 1, 2, 3, 4, 9, 10)), 'minute')).toBe(
+        false
+      )
     })
 
     test('should return false when month mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 2, 2, 3, 4, 9, 10)), 'minute')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 2, 2, 3, 4, 9, 10)), 'minute')).toBe(
+        false
+      )
     })
 
     test('should return false when day mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 3, 3, 4, 9, 10)), 'minute')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 3, 3, 4, 9, 10)), 'minute')).toBe(
+        false
+      )
     })
 
     test('should return false when hour mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 4, 4, 9, 10)), 'minute')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 4, 4, 9, 10)), 'minute')).toBe(
+        false
+      )
     })
 
     test('should return false when minute mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 5, 9, 10)), 'minute')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 5, 9, 10)), 'minute')).toBe(
+        false
+      )
     })
   })
 
   describe('minute boundaries', () => {
     test('should return true at exact start of minute', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 0, 0)), 'minute')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 0, 0)), 'minute')).toBe(
+        true
+      )
     })
 
     test('should return true at exact end of minute', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 59, 999)), 'minute')).toBe(true)
+      expect(
+        m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 59, 999)), 'minute')
+      ).toBe(true)
     })
 
     test('should return false at start of next minute', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 5, 0, 0)), 'minute')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 5, 0, 0)), 'minute')).toBe(
+        false
+      )
     })
 
     test('should return false at end of previous minute', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 3, 59, 999)), 'minute')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 1, 2, 3, 3, 59, 999)), 'minute')
+      ).toBe(false)
     })
   })
 
@@ -351,49 +431,71 @@ describe('isSame with second unit', () => {
 
   describe('second matching', () => {
     test('should return true when second matches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 5, 10)), 'second')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 5, 10)), 'second')).toBe(
+        true
+      )
     })
 
     test('should return false when year mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2012, 1, 2, 3, 4, 5, 10)), 'second')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2012, 1, 2, 3, 4, 5, 10)), 'second')).toBe(
+        false
+      )
     })
 
     test('should return false when month mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 2, 2, 3, 4, 5, 10)), 'second')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 2, 2, 3, 4, 5, 10)), 'second')).toBe(
+        false
+      )
     })
 
     test('should return false when day mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 3, 3, 4, 5, 10)), 'second')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 3, 3, 4, 5, 10)), 'second')).toBe(
+        false
+      )
     })
 
     test('should return false when hour mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 4, 4, 5, 10)), 'second')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 4, 4, 5, 10)), 'second')).toBe(
+        false
+      )
     })
 
     test('should return false when minute mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 5, 5, 10)), 'second')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 5, 5, 10)), 'second')).toBe(
+        false
+      )
     })
 
     test('should return false when second mismatches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 6, 10)), 'second')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 6, 10)), 'second')).toBe(
+        false
+      )
     })
   })
 
   describe('second boundaries', () => {
     test('should return true at exact start of second', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 5, 0)), 'second')).toBe(true)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 5, 0)), 'second')).toBe(
+        true
+      )
     })
 
     test('should return true at exact end of second', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 5, 999)), 'second')).toBe(true)
+      expect(
+        m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 5, 999)), 'second')
+      ).toBe(true)
     })
 
     test('should return false at start of next second', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 6, 0)), 'second')).toBe(false)
+      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 6, 0)), 'second')).toBe(
+        false
+      )
     })
 
     test('should return false at end of previous second', () => {
-      expect(m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 4, 999)), 'second')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 1, 2, 3, 4, 4, 999)), 'second')
+      ).toBe(false)
     })
   })
 
@@ -414,63 +516,93 @@ describe('isSame with millisecond unit', () => {
 
   describe('millisecond matching', () => {
     test('should return true when millisecond matches', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 2, 3, 4, 5, 10)), 'millisecond')).toBe(true)
+      expect(
+        m.isSame(dayjs(new Date(2011, 3, 2, 3, 4, 5, 10)), 'millisecond')
+      ).toBe(true)
     })
 
     test('should return false when year is later', () => {
-      expect(m.isSame(dayjs(new Date(2012, 3, 2, 3, 4, 5, 10)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2012, 3, 2, 3, 4, 5, 10)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when year is earlier', () => {
-      expect(m.isSame(dayjs(new Date(2010, 3, 2, 3, 4, 5, 10)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2010, 3, 2, 3, 4, 5, 10)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when month is later', () => {
-      expect(m.isSame(dayjs(new Date(2011, 4, 2, 3, 4, 5, 10)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 4, 2, 3, 4, 5, 10)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when month is earlier', () => {
-      expect(m.isSame(dayjs(new Date(2011, 2, 2, 3, 4, 5, 10)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 2, 2, 3, 4, 5, 10)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when day is later', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 3, 3, 4, 5, 10)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 3, 3, 3, 4, 5, 10)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when day is earlier', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 1, 1, 4, 5, 10)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 3, 1, 1, 4, 5, 10)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when hour is later', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 2, 4, 4, 5, 10)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 3, 2, 4, 4, 5, 10)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when hour is earlier', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 1, 4, 1, 5, 10)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 3, 1, 4, 1, 5, 10)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when minute is later', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 2, 3, 5, 5, 10)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 3, 2, 3, 5, 5, 10)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when minute is earlier', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 2, 3, 3, 5, 10)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 3, 2, 3, 3, 5, 10)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when second is later', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 2, 3, 4, 6, 10)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 3, 2, 3, 4, 6, 10)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when second is earlier', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 2, 3, 4, 4, 5)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 3, 2, 3, 4, 4, 5)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when millisecond is later', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 2, 3, 4, 6, 11)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 3, 2, 3, 4, 6, 11)), 'millisecond')
+      ).toBe(false)
     })
 
     test('should return false when millisecond is earlier', () => {
-      expect(m.isSame(dayjs(new Date(2011, 3, 2, 3, 4, 4, 9)), 'millisecond')).toBe(false)
+      expect(
+        m.isSame(dayjs(new Date(2011, 3, 2, 3, 4, 4, 9)), 'millisecond')
+      ).toBe(false)
     })
   })
 
@@ -501,37 +633,53 @@ describe('isAfter with year unit', () => {
 
   describe('year comparisons', () => {
     test('should return false when year matches', () => {
-      expect(m.isAfter(dayjs(new Date(2011, 5, 6, 7, 8, 9, 10)), 'year')).toBe(false)
+      expect(m.isAfter(dayjs(new Date(2011, 5, 6, 7, 8, 9, 10)), 'year')).toBe(
+        false
+      )
     })
 
     test('should return false when year is later', () => {
-      expect(m.isAfter(dayjs(new Date(2013, 5, 6, 7, 8, 9, 10)), 'year')).toBe(false)
+      expect(m.isAfter(dayjs(new Date(2013, 5, 6, 7, 8, 9, 10)), 'year')).toBe(
+        false
+      )
     })
 
     test('should return true when year is earlier', () => {
-      expect(m.isAfter(dayjs(new Date(2010, 5, 6, 7, 8, 9, 10)), 'year')).toBe(true)
+      expect(m.isAfter(dayjs(new Date(2010, 5, 6, 7, 8, 9, 10)), 'year')).toBe(
+        true
+      )
     })
   })
 
   describe('year boundaries', () => {
     test('should return false at exact start of year', () => {
-      expect(m.isAfter(dayjs(new Date(2011, 0, 1, 0, 0, 0, 0)), 'year')).toBe(false)
+      expect(m.isAfter(dayjs(new Date(2011, 0, 1, 0, 0, 0, 0)), 'year')).toBe(
+        false
+      )
     })
 
     test('should return false at exact end of year', () => {
-      expect(m.isAfter(dayjs(new Date(2011, 11, 31, 23, 59, 59, 999)), 'year')).toBe(false)
+      expect(
+        m.isAfter(dayjs(new Date(2011, 11, 31, 23, 59, 59, 999)), 'year')
+      ).toBe(false)
     })
 
     test('should return false at start of next year', () => {
-      expect(m.isAfter(dayjs(new Date(2012, 0, 1, 0, 0, 0, 0)), 'year')).toBe(false)
+      expect(m.isAfter(dayjs(new Date(2012, 0, 1, 0, 0, 0, 0)), 'year')).toBe(
+        false
+      )
     })
 
     test('should return true at end of previous year', () => {
-      expect(m.isAfter(dayjs(new Date(2010, 11, 31, 23, 59, 59, 999)), 'year')).toBe(true)
+      expect(
+        m.isAfter(dayjs(new Date(2010, 11, 31, 23, 59, 59, 999)), 'year')
+      ).toBe(true)
     })
 
     test('should return true at end of year far before', () => {
-      expect(m.isAfter(dayjs(new Date(1980, 11, 31, 23, 59, 59, 999)), 'year')).toBe(true)
+      expect(
+        m.isAfter(dayjs(new Date(1980, 11, 31, 23, 59, 59, 999)), 'year')
+      ).toBe(true)
     })
   })
 
@@ -552,45 +700,65 @@ describe('isAfter with month unit', () => {
 
   describe('month comparisons', () => {
     test('should return false when month matches', () => {
-      expect(m.isAfter(dayjs(new Date(2011, 2, 6, 7, 8, 9, 10)), 'month')).toBe(false)
+      expect(m.isAfter(dayjs(new Date(2011, 2, 6, 7, 8, 9, 10)), 'month')).toBe(
+        false
+      )
     })
 
     test('should return false when year is later', () => {
-      expect(m.isAfter(dayjs(new Date(2012, 2, 6, 7, 8, 9, 10)), 'month')).toBe(false)
+      expect(m.isAfter(dayjs(new Date(2012, 2, 6, 7, 8, 9, 10)), 'month')).toBe(
+        false
+      )
     })
 
     test('should return true when year is earlier', () => {
-      expect(m.isAfter(dayjs(new Date(2010, 2, 6, 7, 8, 9, 10)), 'month')).toBe(true)
+      expect(m.isAfter(dayjs(new Date(2010, 2, 6, 7, 8, 9, 10)), 'month')).toBe(
+        true
+      )
     })
 
     test('should return false when month is later', () => {
-      expect(m.isAfter(dayjs(new Date(2011, 5, 6, 7, 8, 9, 10)), 'month')).toBe(false)
+      expect(m.isAfter(dayjs(new Date(2011, 5, 6, 7, 8, 9, 10)), 'month')).toBe(
+        false
+      )
     })
 
     test('should return true when month is earlier', () => {
-      expect(m.isAfter(dayjs(new Date(2011, 1, 6, 7, 8, 9, 10)), 'month')).toBe(true)
+      expect(m.isAfter(dayjs(new Date(2011, 1, 6, 7, 8, 9, 10)), 'month')).toBe(
+        true
+      )
     })
   })
 
   describe('month boundaries', () => {
     test('should return false at exact start of month', () => {
-      expect(m.isAfter(dayjs(new Date(2011, 2, 1, 0, 0, 0, 0)), 'month')).toBe(false)
+      expect(m.isAfter(dayjs(new Date(2011, 2, 1, 0, 0, 0, 0)), 'month')).toBe(
+        false
+      )
     })
 
     test('should return false at exact end of month', () => {
-      expect(m.isAfter(dayjs(new Date(2011, 2, 31, 23, 59, 59, 999)), 'month')).toBe(false)
+      expect(
+        m.isAfter(dayjs(new Date(2011, 2, 31, 23, 59, 59, 999)), 'month')
+      ).toBe(false)
     })
 
     test('should return false at start of next month', () => {
-      expect(m.isAfter(dayjs(new Date(2011, 3, 1, 0, 0, 0, 0)), 'month')).toBe(false)
+      expect(m.isAfter(dayjs(new Date(2011, 3, 1, 0, 0, 0, 0)), 'month')).toBe(
+        false
+      )
     })
 
     test('should return true at end of previous month', () => {
-      expect(m.isAfter(dayjs(new Date(2011, 1, 27, 23, 59, 59, 999)), 'month')).toBe(true)
+      expect(
+        m.isAfter(dayjs(new Date(2011, 1, 27, 23, 59, 59, 999)), 'month')
+      ).toBe(true)
     })
 
     test('should return true at later month but earlier year', () => {
-      expect(m.isAfter(dayjs(new Date(2010, 12, 31, 23, 59, 59, 999)), 'month')).toBe(true)
+      expect(
+        m.isAfter(dayjs(new Date(2010, 12, 31, 23, 59, 59, 999)), 'month')
+      ).toBe(true)
     })
   })
 

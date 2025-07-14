@@ -1,9 +1,6 @@
 import * as C from './constants'
 import { Utils } from './utils'
-import type {
-  UnitType,
-  UnitTypeShort
-} from './types'
+import type { UnitType, UnitTypeShort } from './types'
 import { locales } from './locales'
 import type { Locales, ILocale } from './locales'
 
@@ -119,7 +116,6 @@ export class DayJS {
     return new Date(date)
   }
 
-
   private wrapper(date: DateInput): DayJS {
     return dayjs(date, {
       locale: this._locale,
@@ -135,7 +131,10 @@ export class DayJS {
 
   isSame(that: DateInput, units?: UnitType): boolean {
     const other = dayjs(that)
-    return this.startOf(units).valueOf() <= other.valueOf() && other.valueOf() <= this.endOf(units).valueOf()
+    return (
+      this.startOf(units).valueOf() <= other.valueOf() &&
+      other.valueOf() <= this.endOf(units).valueOf()
+    )
   }
 
   isAfter(that: DateInput, units?: UnitType): boolean {
@@ -153,8 +152,9 @@ export class DayJS {
   // modified by utc plugin
   valueOf(): number {
     const addedOffset = !(this._offset === undefined)
-      ? this._offset + (this._localOffset ?? this._date.getTimezoneOffset()) : 0
-    return this._date.valueOf() - (addedOffset * C.MILLISECONDS_A_MINUTE)
+      ? this._offset + (this._localOffset ?? this._date.getTimezoneOffset())
+      : 0
+    return this._date.valueOf() - addedOffset * C.MILLISECONDS_A_MINUTE
   }
 
   startOf(units?: UnitTypeShort | UnitType): DayJS {
@@ -169,24 +169,50 @@ export class DayJS {
         )
       case 'month':
         return this.wrapper(
-          this._utc ? Date.UTC(this._year, this._month, 1) : new Date(this._year, this._month, 1)
+          this._utc
+            ? Date.UTC(this._year, this._month, 1)
+            : new Date(this._year, this._month, 1)
         )
       case 'week': {
         const weekStart = this._locale.weekStart ?? 0
-        const gap = (this._weekday < weekStart ? this._weekday + 7 : this._weekday) - weekStart
+        const gap =
+          (this._weekday < weekStart ? this._weekday + 7 : this._weekday) -
+          weekStart
         return this.wrapper(
-          this._utc ? Date.UTC(this._year, this._month, this._day - gap) : new Date(this._year, this._month, this._day - gap)
+          this._utc
+            ? Date.UTC(this._year, this._month, this._day - gap)
+            : new Date(this._year, this._month, this._day - gap)
         )
       }
       case 'day':
       case 'date':
-        return this.wrapper(this.toDate()[Utils.reflectDateSetMethodName('hour', this._utc)](0, 0, 0, 0))
+        return this.wrapper(
+          this.toDate()[Utils.reflectDateSetMethodName('hour', this._utc)](
+            0,
+            0,
+            0,
+            0
+          )
+        )
       case 'hour':
-        return this.wrapper(this.toDate()[Utils.reflectDateSetMethodName('minute', this._utc)](0, 0, 0))
+        return this.wrapper(
+          this.toDate()[Utils.reflectDateSetMethodName('minute', this._utc)](
+            0,
+            0,
+            0
+          )
+        )
       case 'minute':
-        return this.wrapper(this.toDate()[Utils.reflectDateSetMethodName('second', this._utc)](0, 0))
+        return this.wrapper(
+          this.toDate()[Utils.reflectDateSetMethodName('second', this._utc)](
+            0,
+            0
+          )
+        )
       case 'second':
-        return this.wrapper(this.toDate()[Utils.reflectDateSetMethodName('ms', this._utc)](0))
+        return this.wrapper(
+          this.toDate()[Utils.reflectDateSetMethodName('ms', this._utc)](0)
+        )
       default:
         return this.clone()
     }
@@ -210,31 +236,74 @@ export class DayJS {
         )
       case 'week': {
         const weekStart = this._locale.weekStart ?? 0
-        const gap = (this._weekday < weekStart ? this._weekday + 7 : this._weekday) - weekStart
+        const gap =
+          (this._weekday < weekStart ? this._weekday + 7 : this._weekday) -
+          weekStart
         return this.wrapper(
           this._utc
-            ? Date.UTC(this._year, this._month, this._day + (6 - gap), 23, 59, 59, 999)
-            : new Date(this._year, this._month, this._day + (6 - gap), 23, 59, 59, 999)
+            ? Date.UTC(
+                this._year,
+                this._month,
+                this._day + (6 - gap),
+                23,
+                59,
+                59,
+                999
+              )
+            : new Date(
+                this._year,
+                this._month,
+                this._day + (6 - gap),
+                23,
+                59,
+                59,
+                999
+              )
         )
       }
       case 'day':
       case 'date':
-        return this.wrapper(this.toDate()[Utils.reflectDateSetMethodName('hour', this._utc)](23, 59, 59, 999))
+        return this.wrapper(
+          this.toDate()[Utils.reflectDateSetMethodName('hour', this._utc)](
+            23,
+            59,
+            59,
+            999
+          )
+        )
       case 'hour':
-        return this.wrapper(this.toDate()[Utils.reflectDateSetMethodName('minute', this._utc)](59, 59, 999))
+        return this.wrapper(
+          this.toDate()[Utils.reflectDateSetMethodName('minute', this._utc)](
+            59,
+            59,
+            999
+          )
+        )
       case 'minute':
-        return this.wrapper(this.toDate()[Utils.reflectDateSetMethodName('second', this._utc)](59, 999))
+        return this.wrapper(
+          this.toDate()[Utils.reflectDateSetMethodName('second', this._utc)](
+            59,
+            999
+          )
+        )
       case 'second':
-        return this.wrapper(this.toDate()[Utils.reflectDateSetMethodName('ms', this._utc)](999))
+        return this.wrapper(
+          this.toDate()[Utils.reflectDateSetMethodName('ms', this._utc)](999)
+        )
       default:
         return this.clone()
     }
   }
 
-  set(unit: (Exclude<UnitType, 'week' | 'quarter'>) | (Exclude<UnitTypeShort, 'w' | 'Q'>), value: number): DayJS {
-    const newInstance = this.clone();
-    const u = Utils.prettyUnit(unit) as Exclude<UnitType, 'week' | 'quarter'>;
-    const setMethod = Utils.reflectDateSetMethodName(u, this._utc);
+  set(
+    unit:
+      | Exclude<UnitType, 'week' | 'quarter'>
+      | Exclude<UnitTypeShort, 'w' | 'Q'>,
+    value: number
+  ): DayJS {
+    const newInstance = this.clone()
+    const u = Utils.prettyUnit(unit) as Exclude<UnitType, 'week' | 'quarter'>
+    const setMethod = Utils.reflectDateSetMethodName(u, this._utc)
 
     if (u === 'month' || u === 'year') {
       // there is a risk of date overflow, so we need to set the date to 1 first
@@ -246,35 +315,41 @@ export class DayJS {
     } else {
       const arg = u === 'day' ? this._day + (value - this._weekday) : value
       newInstance._date[setMethod](arg)
-
     }
     return this.wrapper(newInstance._date)
   }
 
-  get(unit: (Exclude<UnitType, 'week' | 'quarter'>) | (Exclude<UnitTypeShort, 'w' | 'Q'>)): number {
+  get(
+    unit:
+      | Exclude<UnitType, 'week' | 'quarter'>
+      | Exclude<UnitTypeShort, 'w' | 'Q'>
+  ): number {
     const key = Utils.prettyUnit(unit) as Exclude<UnitType, 'week' | 'quarter'>
 
     switch (key) {
       case 'year':
-        return this._year;
+        return this._year
       case 'month':
-        return this._month;
+        return this._month
       case 'day':
         return this._weekday
       case 'date':
-        return this._day;
+        return this._day
       case 'hour':
-        return this._hour;
+        return this._hour
       case 'minute':
-        return this._minute;
+        return this._minute
       case 'second':
-        return this._second;
+        return this._second
       case 'millisecond':
-        return this._ms;
+        return this._ms
     }
   }
 
-  add(value: number, unit: Exclude<UnitType, 'quarter' | 'date'> = 'millisecond'): DayJS {
+  add(
+    value: number,
+    unit: Exclude<UnitType, 'quarter' | 'date'> = 'millisecond'
+  ): DayJS {
     if (unit === 'month') {
       return this.set('month', this._month + value)
     }
@@ -292,7 +367,7 @@ export class DayJS {
       millisecond: 1,
       minute: C.MILLISECONDS_A_MINUTE,
       hour: C.MILLISECONDS_A_HOUR,
-      second: C.MILLISECONDS_A_SECOND,
+      second: C.MILLISECONDS_A_SECOND
     }
 
     const nextTimeStamp = this._date.getTime() + value * step[unit]
@@ -307,7 +382,8 @@ export class DayJS {
     if (!this.isValid()) return C.INVALID_DATE_STRING
 
     //add by utc plugin
-    const str = formatStr ?? (this._utc ? C.UTC_FORMAT_DEFAULT : C.FORMAT_DEFAULT)
+    const str =
+      formatStr ?? (this._utc ? C.UTC_FORMAT_DEFAULT : C.FORMAT_DEFAULT)
     const zoneStr = this.utcOffset() ? Utils.padZoneStr(this.utcOffset()) : 'Z'
 
     const matches = (match: string) => {
@@ -321,7 +397,10 @@ export class DayJS {
         case 'MM':
           return String(this._month + 1).padStart(2, '0')
         case 'MMM':
-          return this._locale.monthsShort?.[this._month] ?? this._locale.months[this._month].slice(0, 3)
+          return (
+            this._locale.monthsShort?.[this._month] ??
+            this._locale.months[this._month].slice(0, 3)
+          )
         case 'MMMM':
           return this._locale.months[this._month]
         case 'D':
@@ -331,9 +410,15 @@ export class DayJS {
         case 'd':
           return String(this._weekday)
         case 'dd':
-          return this._locale.weekdaysMin?.[this._weekday] ?? this._locale.weekdays[this._weekday].slice(0, 2)
+          return (
+            this._locale.weekdaysMin?.[this._weekday] ??
+            this._locale.weekdays[this._weekday].slice(0, 2)
+          )
         case 'ddd':
-          return this._locale.weekdaysShort?.[this._weekday] ?? this._locale.weekdays[this._weekday].slice(0, 3)
+          return (
+            this._locale.weekdaysShort?.[this._weekday] ??
+            this._locale.weekdays[this._weekday].slice(0, 3)
+          )
         case 'dddd':
           return this._locale.weekdays[this._weekday]
         case 'H':
@@ -343,7 +428,10 @@ export class DayJS {
         case 'h':
           return String(this._hour % 12 === 0 ? 12 : this._hour % 12)
         case 'hh':
-          return String(this._hour % 12 === 0 ? 12 : this._hour % 12).padStart(2, '0')
+          return String(this._hour % 12 === 0 ? 12 : this._hour % 12).padStart(
+            2,
+            '0'
+          )
         case 'a':
           return this._locale.meridiem(this._hour, this._minute, true)
         case 'A':
@@ -376,30 +464,34 @@ export class DayJS {
   utcOffset(offset: number | string, keepLocalTime?: boolean): DayJS
   utcOffset(input?: number | string, keepLocalTime?: boolean): number | DayJS {
     if (input === undefined) {
-      if (this._utc) return 0;
+      if (this._utc) return 0
       if (this._offset !== undefined) return this._offset
       // Because a bug at FF24, we're rounding the timezone offset around 15 minutes
       // https://github.com/moment/moment/pull/1871
       return -Math.round(this._date.getTimezoneOffset() / 15) * 15
     } else {
-      const inputOffset = typeof input === 'number' ? input : Utils.offsetFromString(input);
-      if (inputOffset === null) return this;
+      const inputOffset =
+        typeof input === 'number' ? input : Utils.offsetFromString(input)
+      if (inputOffset === null) return this
 
-      const offset = Math.abs(inputOffset) <= 16 ? inputOffset * 60 : inputOffset
-      let that = this.clone();
+      const offset =
+        Math.abs(inputOffset) <= 16 ? inputOffset * 60 : inputOffset
+      let that = this.clone()
       if (keepLocalTime) {
         that._offset = offset
         that._utc = input === 0
       }
       if (input !== 0) {
-        const localTimezoneOffset = this._utc ? this.toDate().getTimezoneOffset() : -1 * this.utcOffset()
+        const localTimezoneOffset = this._utc
+          ? this.toDate().getTimezoneOffset()
+          : -1 * this.utcOffset()
         that = this.local().add(offset + localTimezoneOffset, 'minute')
         that._offset = offset
         that._localOffset = localTimezoneOffset
       } else {
         that = this.utc()
       }
-      return that;
+      return that
     }
   }
 
@@ -411,10 +503,15 @@ export class DayJS {
     return this.local()._diff(dayjs(input).local(), units, float)
   }
 
-  private _diff(input?: DateInput, units: UnitType = 'millisecond', float?: boolean): number {
+  private _diff(
+    input?: DateInput,
+    units: UnitType = 'millisecond',
+    float?: boolean
+  ): number {
     const unit = Utils.prettyUnit(units)
     const that = dayjs(input)
-    const zoneDelta = (that.utcOffset() - this.utcOffset()) * C.MILLISECONDS_A_MINUTE
+    const zoneDelta =
+      (that.utcOffset() - this.utcOffset()) * C.MILLISECONDS_A_MINUTE
     const diff = this.valueOf() - that.valueOf()
 
     let result: number
@@ -453,7 +550,10 @@ export class DayJS {
 
   daysInMonth(): number {
     if (this._month === 1) {
-      return (this._year % 4 === 0 && this._year % 100 !== 0) || this._year % 400 === 0 ? 29 : 28
+      return (this._year % 4 === 0 && this._year % 100 !== 0) ||
+        this._year % 400 === 0
+        ? 29
+        : 28
     }
     const map = {
       '1': 31,
@@ -465,7 +565,7 @@ export class DayJS {
       '8': 31,
       '9': 30,
       '10': 31,
-      "11": 30,
+      '11': 30,
       '12': 31
     }
 
@@ -473,9 +573,9 @@ export class DayJS {
   }
 
   locale(preset?: Locales | ILocale): DayJS {
-    const ins = this.clone();
+    const ins = this.clone()
     if (preset) {
-      ins._locale = DayJS.parseLocale(preset);
+      ins._locale = DayJS.parseLocale(preset)
     }
 
     return ins
@@ -525,7 +625,6 @@ export class DayJS {
     return value === undefined ? this._minute : this.set('minute', value)
   }
 
-
   hour(): number
   hour(value: number): DayJS
   hour(value?: number) {
@@ -561,9 +660,12 @@ export class DayJS {
 
   // utc plugin --- start ---
   utc(keepLocalTime?: boolean): DayJS {
-    const ins = new DayJS({ date: this.toDate(), locale: this._locale, utc: true })
+    const ins = new DayJS({
+      date: this.toDate(),
+      locale: this._locale,
+      utc: true
+    })
     return keepLocalTime ? ins.add(this.utcOffset(), 'minute') : ins
-
   }
 
   local(): DayJS {
@@ -613,7 +715,7 @@ export class DayJS {
       isFuture = result > 0
 
       if (!t.r || abs <= t.r) {
-        const format = loc[(abs <= 1 && i > 0) ? thresholds[i - 1].l : t.l]
+        const format = loc[abs <= 1 && i > 0 ? thresholds[i - 1].l : t.l]
         out = format.replace('%d', postFormat?.(String(abs)) ?? String(abs))
         break
       }
@@ -651,12 +753,15 @@ export class DayJS {
     return DayJS.sortBy('isBefore', dates.flat())
   }
 
-  private static sortBy(method: 'isAfter' | 'isBefore', dates: DayJS[]): DayJS | null {
+  private static sortBy(
+    method: 'isAfter' | 'isBefore',
+    dates: DayJS[]
+  ): DayJS | null {
     if (dates.length === 0) {
       return null
     }
 
-    const validDates = dates.filter(d => d.isValid())
+    const validDates = dates.filter((d) => d.isValid())
 
     if (validDates.length === 0) {
       return null
@@ -681,11 +786,13 @@ export function dayjs(date?: DateInput, config?: Omit<Config, 'date'>): DayJS {
   return new DayJS({ date, ...config })
 }
 
-dayjs.prototype = DayJS.prototype;
+dayjs.prototype = DayJS.prototype
 
-dayjs.parseLocale = (configLocale: Config['locale']) => DayJS.parseLocale(configLocale).name;
+dayjs.parseLocale = (configLocale: Config['locale']) =>
+  DayJS.parseLocale(configLocale).name
 
-dayjs.isDayjs = (d: any): d is DayJS => d && typeof d === 'object' && d[IS_DAYJS] === true
+dayjs.isDayjs = (d: any): d is DayJS =>
+  d && typeof d === 'object' && d[IS_DAYJS] === true
 
 dayjs.unix = (timestamp: number) => dayjs(timestamp * 1e3)
 
@@ -693,7 +800,10 @@ dayjs.unix = (timestamp: number) => dayjs(timestamp * 1e3)
 // plugins
 
 // utc plugin
-dayjs.utc = function (date?: DateInput, config?: Omit<Config, 'date' | 'utc'>): DayJS {
+dayjs.utc = function (
+  date?: DateInput,
+  config?: Omit<Config, 'date' | 'utc'>
+): DayJS {
   return dayjs(date, { utc: true, ...config })
 }
 
