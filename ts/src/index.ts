@@ -309,10 +309,6 @@ export class DayJS {
     //add by utc plugin
     const str = formatStr ?? (this._utc ? C.UTC_FORMAT_DEFAULT : C.FORMAT_DEFAULT)
     const zoneStr = this.utcOffset() ? Utils.padZoneStr(this.utcOffset()) : 'Z'
-    const meridiem = ((hour: number, isLowercase: boolean) => {
-      const m = hour < 12 ? 'AM' : 'PM'
-      return isLowercase ? m.toLowerCase() : m
-    })
 
     const matches = (match: string) => {
       switch (match) {
@@ -349,9 +345,9 @@ export class DayJS {
         case 'hh':
           return String(this._hour % 12 === 0 ? 12 : this._hour % 12).padStart(2, '0')
         case 'a':
-          return meridiem(this._hour, true)
+          return this._locale.meridiem(this._hour, this._minute, true)
         case 'A':
-          return meridiem(this._hour, false)
+          return this._locale.meridiem(this._hour, this._minute, false)
         case 'm':
           return String(this._minute)
         case 'mm':
@@ -408,14 +404,14 @@ export class DayJS {
   }
 
   // modified by utc plugin
-  diff(input?: DateInput, units?: Exclude<UnitType, 'week'>, float?: boolean): number {
+  diff(input?: DateInput, units?: UnitType, float?: boolean): number {
     if (input && input instanceof DayJS && this._utc === input._utc) {
       return this._diff(input, units, float)
     }
     return this.local()._diff(dayjs(input).local(), units, float)
   }
 
-  private _diff(input?: DateInput, units: Exclude<UnitType, 'week'> = 'millisecond', float?: boolean): number {
+  private _diff(input?: DateInput, units: UnitType = 'millisecond', float?: boolean): number {
     const unit = Utils.prettyUnit(units)
     const that = dayjs(input)
     const zoneDelta = (that.utcOffset() - this.utcOffset()) * C.MILLISECONDS_A_MINUTE
@@ -477,11 +473,12 @@ export class DayJS {
   }
 
   locale(preset?: Locales | ILocale): DayJS {
-    if (!preset) return this.clone()
+    const ins = this.clone();
+    if (preset) {
+      ins._locale = DayJS.parseLocale(preset);
+    }
 
-    const that = this.clone();
-    that._locale = DayJS.parseLocale(preset);
-    return that
+    return ins
   }
 
   clone(): DayJS {
