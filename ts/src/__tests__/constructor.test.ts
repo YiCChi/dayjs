@@ -1,14 +1,5 @@
-import MockDate from 'mockdate'
 import dayjs from '../index'
-import { beforeEach, afterEach, it, expect ,vi} from 'vitest'
-
-beforeEach(() => {
-  MockDate.set(new Date())
-})
-
-afterEach(() => {
-  MockDate.reset()
-})
+import { it, expect } from 'vitest'
 
 it('supports instanceof dayjs', () => {
   expect(dayjs() instanceof dayjs).toBeTruthy()

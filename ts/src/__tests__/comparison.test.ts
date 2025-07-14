@@ -1,14 +1,5 @@
-import MockDate from 'mockdate'
 import dayjs from '../index'
-import { describe, beforeEach, afterEach, test, expect, it } from 'vitest';
-
-beforeEach(() => {
-  MockDate.set(new Date())
-})
-
-afterEach(() => {
-  MockDate.reset()
-})
+import { describe, test, expect, } from 'vitest';
 
 describe('isSame without units', () => {
   const m = dayjs(new Date(2011, 3, 2, 3, 4, 5, 10))
