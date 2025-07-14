@@ -1,6 +1,21 @@
-import type { DayJS } from '.'
+import type { DayJS } from './index'
 import * as C from './constants'
 import type { UnitType, UnitTypeShort } from './types'
+
+const VALID_SHORT_UNITS: UnitTypeShort[] = ['ms', 's', 'm', 'h', 'd', 'w', 'M', 'Q', 'y', 'D']
+
+const SHORT_UNIT_MAP: Record<UnitTypeShort, UnitType> = {
+  ms: 'millisecond',
+  s: 'second',
+  m: 'minute',
+  h: 'hour',
+  d: 'day',
+  w: 'week',
+  M: 'month',
+  Q: 'quarter',
+  y: 'year',
+  D: 'date'
+}
 
 export class Utils {
   static padZoneStr(offsetMinutes: number): string {
@@ -31,57 +46,25 @@ export class Utils {
   }
 
   static isUnitTypeShort(u: unknown): u is UnitTypeShort {
-    const validUnits: UnitTypeShort[] = [
-      'ms',
-      's',
-      'm',
-      'h',
-      'd',
-      'w',
-      'M',
-      'Q',
-      'y',
-      'D'
-    ]
-    if (typeof u !== 'string' || !validUnits.includes(u as UnitTypeShort))
+    if (typeof u !== 'string' || !VALID_SHORT_UNITS.includes(u as UnitTypeShort))
       return false
 
     return true
   }
   static prettyUnit(u: UnitTypeShort | UnitType): UnitType {
-    const special: Record<UnitTypeShort, UnitType> = {
-      ms: 'millisecond',
-      s: 'second',
-      m: 'minute',
-      h: 'hour',
-      d: 'day',
-      w: 'week',
-      M: 'month',
-      Q: 'quarter',
-      y: 'year',
-      D: 'date'
-    }
-
-    if (Utils.isUnitTypeShort(u)) return special[u]
+    if (Utils.isUnitTypeShort(u)) return SHORT_UNIT_MAP[u]
 
     return u
   }
 
   static offsetFromString(value = ''): number | null {
     const offset = value.match(C.REGEX_VALID_OFFSET_FORMAT)
+    if (!offset) return null
 
-    if (!offset) {
-      return null
-    }
-
-    const [indicator, hoursOffset, minutesOffset] = `${offset[0]}`.match(
-      C.REGEX_OFFSET_HOURS_MINUTES_FORMAT
-    ) || ['-', '0', '0']
+    const [indicator, hoursOffset, minutesOffset] = `${offset[0]}`.match(C.REGEX_OFFSET_HOURS_MINUTES_FORMAT) ?? ['-', 0, 0]
     const totalOffsetInMinutes = +hoursOffset * 60 + +minutesOffset
 
-    if (totalOffsetInMinutes === 0) {
-      return 0
-    }
+    if (totalOffsetInMinutes === 0) return 0
 
     return indicator === '+' ? totalOffsetInMinutes : -totalOffsetInMinutes
   }

@@ -1,5 +1,3 @@
-import type { ILocale } from "./locales"
-
 export type UnitTypeShort =
   | 'ms'
   | 's'

@@ -4,7 +4,7 @@ import type {
   UnitType,
   UnitTypeShort
 } from './types'
-import { locales, ja } from './locales'
+import { locales } from './locales'
 import type { Locales, ILocale } from './locales'
 
 export type DateInput = Config['date'] | DayJS
@@ -135,7 +135,7 @@ export class DayJS {
 
   isSame(that: DateInput, units?: UnitType): boolean {
     const other = dayjs(that)
-    return this.startOf(units) <= other && other <= this.endOf(units)
+    return this.startOf(units).valueOf() <= other.valueOf() && other.valueOf() <= this.endOf(units).valueOf()
   }
 
   isAfter(that: DateInput, units?: UnitType): boolean {
@@ -159,7 +159,8 @@ export class DayJS {
 
   startOf(units?: UnitTypeShort | UnitType): DayJS {
     // const utcPad = `set${this._utc ? 'UTC' : ''}` as const
-    const unit = Utils.prettyUnit(units ?? 'day')
+    const unit = units === undefined ? undefined : Utils.prettyUnit(units)
+    // const unit = Utils.prettyUnit(units ?? 'day')
 
     switch (unit) {
       case 'year':
@@ -192,7 +193,7 @@ export class DayJS {
   }
 
   endOf(units?: UnitTypeShort | UnitType): DayJS {
-    const unit = Utils.prettyUnit(units ?? 'day')
+    const unit = units === undefined ? undefined : Utils.prettyUnit(units)
 
     switch (unit) {
       case 'year':
@@ -273,7 +274,7 @@ export class DayJS {
     }
   }
 
-  add(value: number, unit: Exclude<UnitType, 'quarter' | 'date'>): DayJS {
+  add(value: number, unit: Exclude<UnitType, 'quarter' | 'date'> = 'millisecond'): DayJS {
     if (unit === 'month') {
       return this.set('month', this._month + value)
     }
@@ -334,9 +335,9 @@ export class DayJS {
         case 'd':
           return String(this._weekday)
         case 'dd':
-          this._locale.weekdaysMin?.[this._weekday] ?? this._locale.weekdays[this._weekday].slice(0, 2)
+          return this._locale.weekdaysMin?.[this._weekday] ?? this._locale.weekdays[this._weekday].slice(0, 2)
         case 'ddd':
-          this._locale.weekdaysShort?.[this._weekday] ?? this._locale.weekdays[this._weekday].slice(0, 3)
+          return this._locale.weekdaysShort?.[this._weekday] ?? this._locale.weekdays[this._weekday].slice(0, 3)
         case 'dddd':
           return this._locale.weekdays[this._weekday]
         case 'H':
@@ -385,20 +386,7 @@ export class DayJS {
       // https://github.com/moment/moment/pull/1871
       return -Math.round(this._date.getTimezoneOffset() / 15) * 15
     } else {
-      const REGEX_VALID_OFFSET_FORMAT = /[+-]\d\d(?::?\d\d)?/g
-      const REGEX_OFFSET_HOURS_MINUTES_FORMAT = /([+-]|\d\d)/g
-      const parseOffsetString = (value = '') => {
-        const offset = value.match(REGEX_VALID_OFFSET_FORMAT)
-        if (!offset) return null
-
-        const [indicator, hoursOffset, minutesOffset] = `${offset[0]}`.match(REGEX_OFFSET_HOURS_MINUTES_FORMAT) || ['-', 0, 0]
-        const totalOffsetInMinutes = (+hoursOffset * 60) + (+minutesOffset)
-
-        if (totalOffsetInMinutes === 0) return 0
-
-        return indicator === '+' ? totalOffsetInMinutes : -totalOffsetInMinutes
-      }
-      const inputOffset = typeof input === 'number' ? input : parseOffsetString(input);
+      const inputOffset = typeof input === 'number' ? input : Utils.offsetFromString(input);
       if (inputOffset === null) return this;
 
       const offset = Math.abs(inputOffset) <= 16 ? inputOffset * 60 : inputOffset
@@ -427,8 +415,8 @@ export class DayJS {
     return this.local()._diff(dayjs(input).local(), units, float)
   }
 
-  private _diff(input?: DateInput, units?: Exclude<UnitType, 'week'>, float?: boolean): number {
-    const unit = Utils.prettyUnit(units || 'millisecond')
+  private _diff(input?: DateInput, units: Exclude<UnitType, 'week'> = 'millisecond', float?: boolean): number {
+    const unit = Utils.prettyUnit(units)
     const that = dayjs(input)
     const zoneDelta = (that.utcOffset() - this.utcOffset()) * C.MILLISECONDS_A_MINUTE
     const diff = this.valueOf() - that.valueOf()
@@ -438,11 +426,11 @@ export class DayJS {
       case 'year':
         result = Utils.monthDiff(this, that) / 12
         break
-      case 'month':
-        result = Utils.monthDiff(this, that)
-        break
       case 'quarter':
         result = Utils.monthDiff(this, that) / 3
+        break
+      case 'month':
+        result = Utils.monthDiff(this, that)
         break
       case 'week':
         result = (diff - zoneDelta) / C.MILLISECONDS_A_WEEK
@@ -468,7 +456,7 @@ export class DayJS {
   }
 
   daysInMonth(): number {
-    if (this._month === 2) {
+    if (this._month === 1) {
       return (this._year % 4 === 0 && this._year % 100 !== 0) || this._year % 400 === 0 ? 29 : 28
     }
     const map = {
@@ -696,6 +684,8 @@ export function dayjs(date?: DateInput, config?: Omit<Config, 'date'>): DayJS {
   return new DayJS({ date, ...config })
 }
 
+dayjs.prototype = DayJS.prototype;
+
 dayjs.parseLocale = (configLocale: Config['locale']) => DayJS.parseLocale(configLocale).name;
 
 dayjs.isDayjs = (d: any): d is DayJS => d && typeof d === 'object' && d[IS_DAYJS] === true
@@ -715,4 +705,3 @@ dayjs.max = DayJS.max.bind(DayJS)
 dayjs.min = DayJS.min.bind(DayJS)
 
 export default dayjs
-
