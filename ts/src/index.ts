@@ -532,12 +532,13 @@ export class DayJS {
     return map[String(this.month() + 1) as keyof typeof map]
   }
 
-  locale(preset?: Locales | ILocale): DayJS {
-    const ins = this.clone()
-    if (preset) {
-      ins._locale = DayJS.parseLocale(preset)
-    }
+  locale(): string
+  locale(preset: Locales | ILocale): DayJS
+  locale(preset?: Locales | ILocale): DayJS | string {
+    if (preset === undefined) return this._locale.name
 
+    const ins = this.clone()
+    ins._locale = DayJS.parseLocale(preset)
     return ins
   }
 
@@ -786,8 +787,8 @@ export function dayjs(date?: DateInput, config?: Omit<Config, 'date'>): DayJS {
 
 dayjs.prototype = DayJS.prototype
 
-dayjs.parseLocale = (configLocale: Config['locale']) =>
-  DayJS.parseLocale(configLocale).name
+dayjs.locale = (configLocale: Config['locale']) =>
+  dayjs(undefined, { locale: configLocale })
 
 dayjs.isDayjs = (d: any): d is DayJS =>
   d && typeof d === 'object' && d[IS_DAYJS] === true
