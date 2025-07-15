@@ -1,12 +1,12 @@
 import moment from 'moment'
 import dayjs from '../index'
-import { it, expect, vi, afterEach, beforeEach } from 'vitest'
+import { it, expect, vi, beforeAll, afterAll } from 'vitest'
 
-beforeEach(() => {
+beforeAll(() => {
   vi.useFakeTimers()
 })
 
-afterEach(() => {
+afterAll(() => {
   vi.useRealTimers()
 })
 
