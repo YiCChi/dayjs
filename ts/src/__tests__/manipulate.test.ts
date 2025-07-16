@@ -1,13 +1,14 @@
+import MockDate from 'mockdate'
 import moment from 'moment'
 import dayjs from '../index'
-import { it, expect, describe, vi, beforeAll, afterAll } from 'vitest'
+import { it, expect, describe, beforeEach, afterEach } from 'vitest'
 
-beforeAll(() => {
-  vi.useFakeTimers()
+beforeEach(() => {
+  MockDate.set(new Date())
 })
 
-afterAll(() => {
-  vi.useRealTimers()
+afterEach(() => {
+  MockDate.reset()
 })
 
 describe('StartOf EndOf', () => {

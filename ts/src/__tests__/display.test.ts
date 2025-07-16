@@ -181,7 +181,9 @@ describe('Difference', () => {
     units.map((unit) => {
       it('diff ' + unit, () => {
         expect(dayjsA.diff(dayjsB, unit)).toBe(momentA.diff(momentB, unit))
-        expect(dayjsA.diff(dayjsB, unit, true)).toBe(momentA.diff(momentB, unit, true))
+        expect(dayjsA.diff(dayjsB, unit, true)).toBe(
+          momentA.diff(momentB, unit, true)
+        )
         expect(dayjsA.diff(dayjsC, unit)).toBe(momentA.diff(momentC, unit))
         expect(dayjsA.diff(dayjsC, unit, true)).toBe(
           momentA.diff(momentC, unit, true)

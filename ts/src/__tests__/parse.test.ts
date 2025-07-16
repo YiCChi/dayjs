@@ -1,13 +1,11 @@
 import moment from 'moment'
 import dayjs from '../index'
-import { REGEX_PARSE } from '../constants';
+import { REGEX_PARSE } from '../constants'
 import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest'
 
 beforeAll(() => {
-  // moment.locale('ja')
-  
   vi.useFakeTimers()
-  global.console.warn = vi.fn()
+  global.console.warn = vi.fn() // moment.js '2018-4-1 1:1:1:22' will throw warn
 })
 
 afterAll(() => {
@@ -20,7 +18,6 @@ describe('Parse', () => {
   })
 
   it('moment-js like formatted dates', () => {
-    global.console.warn = vi.fn()// moment.js '2018-4-1 1:1:1:22' will throw warn
     let d = '20130108'
     expect(dayjs(d).valueOf()).toBe(moment(d).utc().valueOf())
     d = '2018-04-24'
@@ -61,7 +58,8 @@ describe('Parse', () => {
   it('String ECMAScript, time and zone', () => {
     // should parse dates formatted in ECMA script format
     // see https://www.ecma-international.org/ecma-262/9.0/index.html#sec-date.prototype.tostring
-    const time = 'Mon Feb 11 2019 11:01:37 GMT+0100 (Mitteleuropäische Normalzeit)'
+    const time =
+      'Mon Feb 11 2019 11:01:37 GMT+0100 (Mitteleuropäische Normalzeit)'
     const expected = '2019-02-11T10:01:37.000Z'
     const d = dayjs(time)
     expect(d.toISOString()).toEqual(expected)
@@ -82,14 +80,18 @@ describe('Parse', () => {
   })
 
   it('String Other, Undefined and Null and isValid', () => {
-    expect(dayjs('otherString').toString().toLowerCase()).toBe(moment('otherString').toString().toLowerCase())
+    expect(dayjs('otherString').toString().toLowerCase()).toBe(
+      moment('otherString').toString().toLowerCase()
+    )
     expect(dayjs(undefined).toDate()).toEqual(moment(undefined).toDate())
     expect(dayjs().isValid()).toBe(true)
     expect(dayjs(undefined).isValid()).toBe(true)
     expect(dayjs('').isValid()).toBe(false)
     expect(dayjs(null).isValid()).toBe(false)
     expect(dayjs('otherString').isValid()).toBe(false)
-    expect(dayjs(null).toString().toLowerCase()).toBe(moment(null).toString().toLowerCase())
+    expect(dayjs(null).toString().toLowerCase()).toBe(
+      moment(null).toString().toLowerCase()
+    )
   })
 })
 
@@ -101,8 +103,12 @@ it('Unix Timestamp Number (milliseconds) 1523520536000', () => {
 it('Unix Timestamp Number (seconds) 1318781876', () => {
   const timestamp1 = 1318781876
   const timestamp2 = 1318781876.721
-  expect(dayjs.unix(timestamp1).valueOf()).toBe(moment.unix(timestamp1).valueOf())
-  expect(dayjs.unix(timestamp2).valueOf()).toBe(moment.unix(timestamp2).valueOf())
+  expect(dayjs.unix(timestamp1).valueOf()).toBe(
+    moment.unix(timestamp1).valueOf()
+  )
+  expect(dayjs.unix(timestamp2).valueOf()).toBe(
+    moment.unix(timestamp2).valueOf()
+  )
 })
 
 it('String and Number 20180101', () => {
@@ -140,7 +146,9 @@ describe('REGEX_PARSE', () => {
     const date = '2019-03-25T06:41:00.999999999'
     const d = date.match(REGEX_PARSE)
     expect(dayjs(date).valueOf()).toBe(moment(date).valueOf())
-    expect(d!.join('-')).toBe('2019-03-25T06:41:00.999999999-2019-03-25-06-41-00-999999999')
+    expect(d!.join('-')).toBe(
+      '2019-03-25T06:41:00.999999999-2019-03-25-06-41-00-999999999'
+    )
   })
   it('20210102T012345', () => {
     const date = '20210102T012345'
