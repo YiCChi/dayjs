@@ -1,14 +1,15 @@
 import moment from 'moment'
 import dayjs from '../index'
 import { zhCn } from '../locales'
-import { it, expect, vi, describe } from 'vitest'
+import { it, expect, vi, describe, beforeAll } from 'vitest'
 
-moment.locale('ja')
+beforeAll(() => {
+  moment.locale('ja')
+  global.console.warn = vi.fn() // Suppress warnings
+})
 
 it('Format no formatStr', () => {
-  vi.useFakeTimers()
   expect(dayjs().format()).toBe(moment().format())
-  vi.useRealTimers()
 })
 
 it('Format invalid date', () => {
@@ -17,26 +18,20 @@ it('Format invalid date', () => {
 })
 
 it('Format Year YY YYYY', () => {
-  vi.useFakeTimers()
   expect(dayjs().format('YY')).toBe(moment().format('YY'))
   expect(dayjs().format('YYYY')).toBe(moment().format('YYYY'))
-  vi.useRealTimers()
 })
 
 it('Format Month M MM MMM MMMM', () => {
-  vi.useFakeTimers()
   expect(dayjs().format('M')).toBe(moment().format('M'))
   expect(dayjs().format('MM')).toBe(moment().format('MM'))
   expect(dayjs().format('MMM')).toBe(moment().format('MMM'))
   expect(dayjs().format('MMMM')).toBe(moment().format('MMMM'))
-  vi.useRealTimers()
 })
 
 it('Format Day of Month D DD 1 - 31', () => {
-  vi.useFakeTimers()
   expect(dayjs().format('D')).toBe(moment().format('D'))
   expect(dayjs().format('DD')).toBe(moment().format('DD'))
-  vi.useRealTimers()
 })
 
 it('Format Day of Week d Sun - Sat', () => {
@@ -110,12 +105,8 @@ it('Format Second s ss SSS', () => {
 })
 
 it('Format Time Zone ZZ', () => {
-  vi.useFakeTimers()
-
   expect(dayjs().format('Z')).toBe(moment().format('Z'))
   expect(dayjs().format('ZZ')).toBe(moment().format('ZZ'))
-
-  vi.useRealTimers()
 })
 
 it('Format ddd dd MMM with short locale', () => {
@@ -169,13 +160,14 @@ describe('Difference', () => {
     expect(dayjsA.diff(dayjsB)).toBe(momentA.diff(momentB))
   })
 
-  it('diff -> in seconds, minutes, hours, days, weeks, months, quarters, years ', () => {
-    const dayjsA = dayjs()
-    const dayjsB = dayjs().add(1000, 'day')
-    const dayjsC = dayjs().subtract(1000, 'day')
-    const momentA = moment()
-    const momentB = moment().add(1000, 'day')
-    const momentC = moment().subtract(1000, 'day')
+  describe('diff -> in seconds, minutes, hours, days, weeks, months, quarters, years ', () => {
+    const baseDate = '2019-02-16T00:00:00.000'
+    const dayjsA = dayjs(baseDate)
+    const dayjsB = dayjs(baseDate).add(1000, 'day')
+    const dayjsC = dayjs(baseDate).subtract(1000, 'day')
+    const momentA = moment(baseDate)
+    const momentB = moment(baseDate).add(1000, 'day')
+    const momentC = moment(baseDate).subtract(1000, 'day')
     const units = [
       'second',
       'minute',
@@ -186,15 +178,15 @@ describe('Difference', () => {
       'quarter',
       'year'
     ] as const
-    units.forEach((unit) => {
-      expect(dayjsA.diff(dayjsB, unit)).toBe(momentA.diff(momentB, unit))
-      expect(dayjsA.diff(dayjsB, unit, true)).toBe(
-        momentA.diff(momentB, unit, true)
-      )
-      expect(dayjsA.diff(dayjsC, unit)).toBe(momentA.diff(momentC, unit))
-      expect(dayjsA.diff(dayjsC, unit, true)).toBe(
-        momentA.diff(momentC, unit, true)
-      )
+    units.map((unit) => {
+      it('diff ' + unit, () => {
+        expect(dayjsA.diff(dayjsB, unit)).toBe(momentA.diff(momentB, unit))
+        expect(dayjsA.diff(dayjsB, unit, true)).toBe(momentA.diff(momentB, unit, true))
+        expect(dayjsA.diff(dayjsC, unit)).toBe(momentA.diff(momentC, unit))
+        expect(dayjsA.diff(dayjsC, unit, true)).toBe(
+          momentA.diff(momentC, unit, true)
+        )
+      })
     })
   })
 
