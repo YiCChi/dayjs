@@ -63,7 +63,7 @@ export class DayJS {
           const [_, _year, _month, _day, _hour, _minute, _second, _ms] = match
           const year = Number(_year)
           const month = _month === undefined ? 0 : Number(_month) - 1
-          const day = _day ? Number(_day) : 1 
+          const day = _day ? Number(_day) : 1
           const hour = _hour === undefined ? 0 : Number(_hour)
           const minute = _minute === undefined ? 0 : Number(_minute)
           const second = _second === undefined ? 0 : Number(_second)
@@ -94,7 +94,7 @@ export class DayJS {
     return !(this._date.toString() === C.INVALID_DATE_STRING)
   }
 
-  isSame(that: DateInput, units?: UnitType): boolean {
+  isSame(that?: DateInput, units?: UnitType): boolean {
     const other = dayjs(that)
     return (
       this.startOf(units).valueOf() <= other.valueOf() &&
@@ -102,11 +102,11 @@ export class DayJS {
     )
   }
 
-  isAfter(that: DateInput, units?: UnitType): boolean {
+  isAfter(that?: DateInput, units?: UnitType): boolean {
     return dayjs(that) < this.startOf(units)
   }
 
-  isBefore(that: DateInput, units?: UnitType): boolean {
+  isBefore(that?: DateInput, units?: UnitType): boolean {
     return this.endOf(units) < dayjs(that)
   }
 
@@ -439,9 +439,10 @@ export class DayJS {
       let that = this.clone()
       if (keepLocalTime) {
         that._offset = offset
-        that._utc = input === 0
+        that._utc = inputOffset === 0
+        return that
       }
-      if (input !== 0) {
+      if (inputOffset !== 0) {
         const localTimezoneOffset = this._utc
           ? this.toDate().getTimezoneOffset()
           : -1 * this.utcOffset()
