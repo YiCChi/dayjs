@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
-    "build": "tsc",
+    "format": "prettier --write src/**/*.*",
     "dev": "npx tsx --watch test.ts"
   },
   "keywords": [
