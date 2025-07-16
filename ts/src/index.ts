@@ -63,7 +63,7 @@ export class DayJS {
           const [_, _year, _month, _day, _hour, _minute, _second, _ms] = match
           const year = Number(_year)
           const month = _month === undefined ? 0 : Number(_month) - 1
-          const day = _day === undefined ? 1 : Number(_day)
+          const day = _day ? Number(_day) : 1 
           const hour = _hour === undefined ? 0 : Number(_hour)
           const minute = _minute === undefined ? 0 : Number(_minute)
           const second = _second === undefined ? 0 : Number(_second)
